@@ -7,6 +7,9 @@
 | `reason_code` | string | 是 | 隔离或冲突的稳定原因码 |
 | `raw_value` | string | 是 | 未归一的原始证据 |
 | `normalized_value` | string | 是 | 按项目规则得到的值 |
+| `box_id` | string | 是 | 盒号，前导零逐字保留 |
+| `status` | string | 是 | 凭据行核对结论：matched/doubtful/orphan |
+| `candidates` | string | 是 | 存疑记录的候选盒号清单 |
 | `rule_version` | string | 否 | 计算规则版本 |
 
 字符串编号逐字保留。金额与计量值用 `Decimal`。时间值带偏移并以 UTC 参与比较。区间统一采用左闭右开。

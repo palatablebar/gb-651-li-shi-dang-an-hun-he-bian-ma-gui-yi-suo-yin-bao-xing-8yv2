@@ -24,6 +24,13 @@ class Store:
         with self.connect() as db:
             return db.execute("SELECT COUNT(*) FROM runs").fetchone()[0]
 
+    def get(self, run_id: str) -> dict | None:
+        with self.connect() as db:
+            row = db.execute("SELECT digest, result FROM runs WHERE run_id=?", (run_id,)).fetchone()
+        if row is None:
+            return None
+        return {"run_id": run_id, "digest": row[0], "result": json.loads(row[1])}
+
     def all(self) -> list[dict]:
         with self.connect() as db:
             rows = db.execute("SELECT run_id, digest, result FROM runs ORDER BY run_id").fetchall()

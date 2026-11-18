@@ -29,10 +29,16 @@
 | TRAP-09 | 真实边界输入 | 朴素处理会错分 | 保留证据并稳定裁决 | `app/modules/m2_encoding/core.py` | `tests/test_m2_encoding.py::test_trap_2` |
 | TRAP-16 | 真实边界输入 | 朴素处理会错分 | 保留证据并稳定裁决 | `app/modules/m3_fields/core.py` | `tests/test_m3_fields.py::test_trap_2` |
 | TRAP-18 | 真实边界输入 | 朴素处理会错分 | 保留证据并稳定裁决 | `app/modules/m4_content/core.py` | `tests/test_m4_content.py::test_trap_2` |
+| TRAP-21 | 同档号分装多盒且归一记录缺盒号 | 朴素实现随机认领一盒，认错原件 | 不猜测，记 AMBIGUOUS_BOX 存疑，保留候选盒号与原行依据，补件后重对账 | `app/modules/m5_reconcile/core.py` | `tests/test_m5_reconcile.py::test_ambiguous_box_not_guessed` |
+| TRAP-22 | 盒号前导零 | 数值化使 "07" 与 "7" 混同 | 档号盒号全程字符串逐字比较 | `app/modules/m5_reconcile/core.py` | `tests/test_m5_reconcile.py::test_leading_zero_box_distinct` |
+| TRAP-23 | 同一批次重复导出 | 每次导出都新增凭据 | 内容摘要去重复用 run_id，已交接凭据可按 run_id 原样取回 | `app/modules/m6_runs/core.py` `app/store.py` | `tests/test_m6_runs.py::test_rerun_same_batch_no_new_voucher` |
 
         ## 对账规则
 
         - 输入记录数 = 有效记录数 + 隔离记录数 + 空记录数。
+        - 记录级守恒：归一记录数 = 已核对 + 存疑 + 多出；索引原件（档号，盒号）数 = 已核对 + 冲突 + 缺失。
+        - 凭据上的已核对记录必须指向唯一（档号，盒号）；缺盒号且同档号多盒的记录不猜测，记为存疑并保留原行依据。
+        - 批次凭据按内容摘要去重；补件后重新对账生成新凭据，已交接凭据可原样取回。
         - 核心数值或事件数在转换、判定和导出之间保持守恒。
         - 同一输入摘要重跑复用原运行编号，不增加结果行。
 

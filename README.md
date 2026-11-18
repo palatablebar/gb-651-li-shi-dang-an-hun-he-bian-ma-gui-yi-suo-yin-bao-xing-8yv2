@@ -9,11 +9,11 @@
 - M3 字段保形：`/api/fields/normalize`
 - M4 内容归一：`/api/content/normalize`
 - M5 索引对账：`/api/reconcile`
-- M6 批次导出：`/api/export/evidence.csv`
+- M6 批次导出：`/api/export/evidence.csv`、`/api/runs/{run_id}`
 
         ## 核心规则
 
-        候选解码必须完整且无替换字符；档号、盒号与超大流水号始终按字符串逐字保留。
+        候选解码必须完整且无替换字符；档号、盒号与超大流水号始终按字符串逐字保留。同档号多盒且缺盒号的记录不猜测，记为存疑并保留原行依据；批次凭据按内容摘要去重，已交接凭据可原样取回。
 
         ## 启动
 
